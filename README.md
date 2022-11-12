@@ -9,5 +9,5 @@ Implemented in Python, using Pygame to handle the actual drawing of pixels to th
 
 ## Running
 
-I'm developing this in WSL, therefore `make` runs it in the Windows host from within WSL.
+I'm developing this in WSL, therefore `make` runs it in the Windows host from within WSL. (Mostly it's just a lazy hack so I can run it from Vim via `:make`.)
 

@@ -2,6 +2,8 @@ from canvas import Canvas
 import numpy as np
 import math
 
+INFTY = 9999 # Maximum length that we're tracing rays
+
 class Sphere:
     def __init__(self, coords, diameter, color):
         self.coords = np.array(coords)
@@ -11,7 +13,7 @@ class Sphere:
     def solve_quadratic(self, a, b, c):
         """
         Find x s.t. ax^2 + bx + c = 0 via quadratic equation
-        returns x1, x2
+        returns tuple x1, x2
         """
         d = b**2 - 4*a*c # discriminant
         if d < 0: # don't want complex solutions
@@ -37,10 +39,10 @@ class Sphere:
 
         t1, t2 = self.solve_quadratic(a, b, c)
 
-        if 1 <= min(t1, t2) <= 9999:
+        if 1 <= min(t1, t2) <= INFTY:
             return min(t1, t2)
 
-        return 9999
+        return INFTY
 
 
 
@@ -65,14 +67,13 @@ class Raytracer:
         self.canvas.block_till_exit()
 
     def compute(self):
-        O = np.zeros(3)
+        O = np.zeros(3) # Camera position
         for x in range(-(self.canvas.width // 2), self.canvas.width // 2):
             for y in range(-(self.canvas.height // 2), self.canvas.height // 2):
                 D = self.canvas_to_viewport_coords(x, y)
-                min_t = 9999
                 ray_color = (0,0,0)
                 for sphere in self.scene:
-                    if sphere.intersect_ray(O, D) < min_t:
+                    if sphere.intersect_ray(O, D) < INFTY:
                         ray_color = sphere.color
                     
                 rt.canvas.set_color(x, y, ray_color)
@@ -84,5 +85,6 @@ class Raytracer:
 if __name__ == "__main__":
     rt = Raytracer()
     rt.compute()
+    print("compute finished")
     rt.display()
 
